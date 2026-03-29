@@ -1,0 +1,30 @@
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(git:*)",
+      "Bash(gh:*)",
+      "Bash(curl:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)",
+      "Bash(rm:*)",
+      "Bash(cat:*)",
+      "Bash(echo:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(sed:*)",
+      "Bash(awk:*)",
+      "Bash(chmod:*)",
+      "Bash(ls:*)",
+      "Bash(jekyll:*)",
+      "Bash(bundle:*)"
+    ],
+    "deny": [
+      "Bash(sudo rm -rf /*)",
+      "Bash(sudo:*)"
+    ]
+  }
+}
