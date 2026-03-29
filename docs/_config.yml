@@ -1,0 +1,37 @@
+title: "Threat Intel"
+description: "Tracking active cybersecurity threats — 0-days, CVEs, exploits, and advisories."
+baseurl: "/threat-intel"
+url: "https://n0hats.github.io"
+
+theme: minima
+show_excerpts: true
+
+plugins:
+  - jekyll-feed
+
+minima:
+  skin: dark
+
+author:
+  name: "n0hats threat intel team"
+
+feed:
+  path: feed.xml
+
+markdown: kramdown
+highlighter: rouge
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+collections:
+  posts:
+    output: true
+
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"

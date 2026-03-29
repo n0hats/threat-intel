@@ -1,0 +1,85 @@
+---
+layout: default
+---
+
+{% assign sev = page.severity | downcase %}
+
+<article class="threat-post">
+
+  <header class="post-header">
+    <div class="post-meta-top">
+      {% if page.severity %}
+        <span class="badge badge-{{ sev }}">{{ page.severity | upcase }}</span>
+      {% endif %}
+      <time class="post-date" datetime="{{ page.date | date_to_xmlschema }}">
+        {{ page.date | date: "%Y-%m-%d" }}
+      </time>
+    </div>
+
+    <h1 class="post-title">{{ page.title }}</h1>
+
+    {% if page.tags and page.tags.size > 0 %}
+      <div class="tags">
+        {% for tag in page.tags %}
+          <span class="tag">#{{ tag }}</span>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </header>
+
+  <div class="post-body">
+    {{ content }}
+  </div>
+
+  <footer class="post-footer">
+    <a href="{{ '/' | relative_url }}">&larr; Back to all threats</a>
+  </footer>
+
+</article>
+
+<style>
+  .post-header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .post-meta-top {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--text-dim);
+  }
+
+  .post-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.3;
+    margin-bottom: 0.75rem;
+    border: none;
+    padding: 0;
+  }
+
+  /* Severity-specific title accent */
+  .threat-post:has(.badge-critical) .post-title { color: #ffcdd2; }
+  .threat-post:has(.badge-high)     .post-title { color: #ffe0b2; }
+  .threat-post:has(.badge-medium)   .post-title { color: #fff9c4; }
+  .threat-post:has(.badge-low)      .post-title { color: #c8e6c9; }
+
+  .post-body { margin-top: 1.5rem; }
+
+  .post-footer {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+  }
+
+  .post-footer a { color: var(--text-secondary); }
+  .post-footer a:hover { color: var(--accent-green); }
+</style>

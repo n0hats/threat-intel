@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
+  <meta name="description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 }}">
+  <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ '/feed.xml' | relative_url }}">
+  <style>
+    :root {
+      --bg-primary:    #0a0e0f;
+      --bg-secondary:  #111618;
+      --bg-card:       #161c1e;
+      --border:        #1f2d2f;
+      --text-primary:  #c8d8d8;
+      --text-secondary:#7a9a9a;
+      --text-dim:      #4a6060;
+      --accent-green:  #00e676;
+      --accent-red:    #ff1744;
+      --accent-orange: #ff6d00;
+      --accent-yellow: #ffd600;
+      --accent-blue:   #00b0ff;
+      --font-mono:     'Courier New', 'Lucida Console', monospace;
+      --font-sans:     'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    a { color: var(--accent-green); text-decoration: none; }
+    a:hover { color: #69f0ae; text-decoration: underline; }
+
+    /* ── Header / Nav ── */
+    header {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+
+    .site-brand {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--accent-green);
+      letter-spacing: 0.05em;
+    }
+
+    .site-brand .bracket { color: var(--accent-red); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    nav a {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+      text-decoration: none;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: var(--accent-green);
+      border-bottom-color: var(--accent-green);
+    }
+
+    /* ── Main content ── */
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+
+    .footer-inner a { color: var(--text-dim); }
+    .footer-inner a:hover { color: var(--accent-green); }
+
+    /* ── Severity badges ── */
+    .badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 2px 8px;
+      border-radius: 3px;
+      vertical-align: middle;
+    }
+
+    .badge-critical { background: #3d0000; color: var(--accent-red);    border: 1px solid var(--accent-red); }
+    .badge-high     { background: #2d1400; color: var(--accent-orange);  border: 1px solid var(--accent-orange); }
+    .badge-medium   { background: #2d2200; color: var(--accent-yellow);  border: 1px solid var(--accent-yellow); }
+    .badge-low      { background: #002d10; color: var(--accent-green);   border: 1px solid var(--accent-green); }
+
+    /* ── Post cards ── */
+    .post-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--border);
+      border-radius: 4px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .post-card:hover { background: #1a2224; }
+    .post-card.severity-critical { border-left-color: var(--accent-red); }
+    .post-card.severity-high     { border-left-color: var(--accent-orange); }
+    .post-card.severity-medium   { border-left-color: var(--accent-yellow); }
+    .post-card.severity-low      { border-left-color: var(--accent-green); }
+
+    .post-card-meta {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .post-card-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .post-card-excerpt {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Tags ── */
+    .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem; }
+
+    .tag {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--accent-blue);
+      background: #001a2d;
+      border: 1px solid #003a5d;
+      border-radius: 3px;
+      padding: 1px 7px;
+    }
+
+    /* ── Article typography ── */
+    article h1, article h2, article h3, article h4 {
+      color: var(--text-primary);
+      margin: 1.8rem 0 0.75rem;
+    }
+
+    article h1 { font-size: 1.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+    article h2 { font-size: 1.25rem; color: var(--accent-green); font-family: var(--font-mono); }
+    article h3 { font-size: 1.05rem; color: var(--text-secondary); }
+
+    article p  { margin-bottom: 1rem; }
+
+    article ul, article ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    article li { margin-bottom: 0.3rem; }
+
+    article code {
+      font-family: var(--font-mono);
+      font-size: 0.88em;
+      background: #1a2224;
+      color: #80cbc4;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+
+    article pre {
+      background: #0d1618;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+
+    article pre code {
+      background: transparent;
+      padding: 0;
+      color: #a5d6a7;
+    }
+
+    article blockquote {
+      border-left: 3px solid var(--accent-orange);
+      padding: 0.5rem 1rem;
+      background: #1a1400;
+      margin: 1rem 0;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+
+    article a { color: var(--accent-blue); }
+    article a:hover { color: #69c8ff; }
+
+    /* ── Page title ── */
+    .page-heading {
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      color: var(--accent-green);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .page-heading .prompt { color: var(--accent-red); }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .header-inner { flex-direction: column; height: auto; padding: 0.75rem 0; gap: 0.5rem; }
+      nav ul { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <span class="site-brand">
+        <span class="bracket">[</span>threat-intel<span class="bracket">]</span>
+      </span>
+      <nav>
+        <ul>
+          <li><a href="{{ '/' | relative_url }}"{% if page.url == '/' %} class="active"{% endif %}>Home</a></li>
+          <li><a href="{{ '/feed.xml' | relative_url }}">Feed</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    {{ content }}
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>&copy; {{ 'now' | date: "%Y" }} n0hats &mdash; {{ site.description }}</span>
+      &nbsp;|&nbsp;
+      <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
+    </div>
+  </footer>
+
+</body>
+</html>
